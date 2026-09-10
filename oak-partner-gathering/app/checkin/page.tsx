@@ -1,25 +1,34 @@
 'use client';
 
 import { CheckCircle2, ChevronRight, CircleAlert, RefreshCw, ScanLine, UserRound } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Html5QrcodeScanner } from 'html5-qrcode';
 import { AppShell, PageHeader } from '../components/AppShell';
 
 export default function CheckInPage() {
     const [status, setStatus] = useState<'idle' | 'success' | 'error'>('idle');
     const [message, setMessage] = useState('');
+    const processingScan = useRef(false);
 
     useEffect(() => {
         const scanner = new Html5QrcodeScanner('qr-reader', { fps: 10, qrbox: { width: 190, height: 190 } }, false);
         scanner.render(async (decodedText: string) => {
-            const response = await fetch('/api/checkin', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ qrCodeId: decodedText }) });
-            const data = await response.json();
-            if (data.success) {
-                setStatus('success');
-                setMessage(data.attendee.fullName);
-            } else {
-                setStatus('error');
-                setMessage(data.error || 'QR Code Not Recognized');
+            const qrCodeId = decodedText.trim();
+            if (!qrCodeId || processingScan.current) return;
+            processingScan.current = true;
+
+            try {
+                const response = await fetch('/api/checkin', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ qrCodeId }) });
+                const data = await response.json();
+                if (data.success) {
+                    setStatus('success');
+                    setMessage(data.attendee.fullName);
+                } else {
+                    setStatus('error');
+                    setMessage(data.error || 'QR Code Not Recognized');
+                }
+            } finally {
+                window.setTimeout(() => { processingScan.current = false; }, 1500);
             }
         }, () => undefined);
         return () => { scanner.clear().catch(() => undefined); };

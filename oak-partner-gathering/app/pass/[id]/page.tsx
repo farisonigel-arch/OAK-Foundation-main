@@ -1,8 +1,9 @@
 import { db } from '@/lib/db';
 import { QRCodeSVG } from 'qrcode.react';
-import { Download, MapPin, QrCode } from 'lucide-react';
+import { MapPin, QrCode } from 'lucide-react';
 import { notFound } from 'next/navigation';
 import { AppShell } from '../../components/AppShell';
+import { DownloadQrButton } from './DownloadQrButton';
 
 export default async function PassPage({ params }: { params: Promise<{ id: string }> }) {
     const { id } = await params;
@@ -26,7 +27,7 @@ export default async function PassPage({ params }: { params: Promise<{ id: strin
                     <div className="flex justify-center rounded-2xl border border-[#e4e8ed] bg-[#f4f6f8] p-5"><QRCodeSVG value={attendee.qrCodeId} size={190} includeMargin /></div>
                     <div className="mt-4 flex items-center justify-between rounded-xl bg-[#eef2f6] px-3 py-2 text-left text-[8px] text-[#68788c]"><span>Registration ID</span><strong className="text-[#26384b]">{attendee.id.slice(0, 8).toUpperCase()}</strong></div>
                     <p className="mt-3 flex items-center justify-center gap-1 text-[9px] text-gray-500"><MapPin size={11} /> Present this QR code at the door</p>
-                    <button className="mt-4 flex w-full items-center justify-center gap-2 rounded-xl bg-[#06395d] py-3 text-[10px] font-bold text-white shadow-md"><Download size={12} /> Download QR Code</button>
+                    <DownloadQrButton value={attendee.qrCodeId} name={attendee.fullName} />
                 </div>
             </div>
         </AppShell>

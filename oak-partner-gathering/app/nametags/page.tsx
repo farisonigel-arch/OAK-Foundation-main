@@ -1,8 +1,9 @@
 import { db } from '@/lib/db';
 import { QRCodeSVG } from 'qrcode.react';
+import type { Attendee } from '@prisma/client';
 
 export default async function NametagsPage() {
-  const attendees = (await db.attendee.findMany()).filter((attendee) => attendee.qrCodeId);
+  const attendees = (await db.attendee.findMany() as Attendee[]).filter((attendee: Attendee) => attendee.qrCodeId);
 
   return (
     <div className="p-8 bg-white min-h-screen">

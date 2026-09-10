@@ -45,6 +45,9 @@ export async function POST(request: Request) {
 
     const response = NextResponse.json({ success: true, role: newAttendee.role, qrCodeId: newAttendee.qrCodeId });
     response.cookies.set('oak-role', newAttendee.role, { httpOnly: false, sameSite: 'lax', path: '/', maxAge: 60 * 60 * 24 * 30 });
+    if (newAttendee.qrCodeId) {
+      response.cookies.set('oak-qr-id', newAttendee.qrCodeId, { httpOnly: false, sameSite: 'lax', path: '/', maxAge: 60 * 60 * 24 * 30 });
+    }
     return response;
   } catch (error: unknown) {
     const code = typeof error === 'object' && error !== null && 'code' in error ? error.code : undefined;

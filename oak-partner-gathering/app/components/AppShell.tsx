@@ -4,7 +4,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { CalendarDays, Globe2, LayoutGrid, ScanLine, UserRoundPlus } from 'lucide-react';
 import { usePathname } from 'next/navigation';
-import { useState } from 'react';
+import { useSyncExternalStore } from 'react';
 
 const navigation = [
     { href: '/', label: 'Register', icon: UserRoundPlus },
@@ -17,16 +17,19 @@ const navigation = [
 export function AppShell({ children, activePath }: { children: React.ReactNode; activePath?: string }) {
     const pathname = usePathname();
     const active = activePath ?? pathname;
-    const [role] = useState<string | null>(() => {
-        if (typeof document === 'undefined') return null;
-        const match = document.cookie.match(/(?:^|; )oak-role=([^;]+)/);
-        return match ? decodeURIComponent(match[1]) : null;
-    });
+    const role = useSyncExternalStore(
+        () => () => undefined,
+        () => {
+            const match = document.cookie.match(/(?:^|; )oak-role=([^;]+)/);
+            return match ? decodeURIComponent(match[1]) : null;
+        },
+        () => null,
+    );
 
     const allowedPaths = role === 'Coordination Team'
         ? ['/', '/checkin', '/programme', '/directory', '/attendance']
         : role === 'Partner'
-            ? ['/', '/pass']
+            ? ['/', '/pass', '/directory']
             : role
                 ? ['/', '/programme', '/directory']
                 : ['/'];

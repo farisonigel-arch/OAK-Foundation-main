@@ -4,13 +4,14 @@ import { db } from '@/lib/db';
 export async function POST(request: Request) {
   try {
     const { qrCodeId } = await request.json();
+    const normalizedQrCodeId = typeof qrCodeId === 'string' ? qrCodeId.trim() : '';
 
-    if (!qrCodeId) {
+    if (!normalizedQrCodeId) {
       return NextResponse.json({ error: 'QR Code Not Recognized' }, { status: 400 });
     }
 
     const attendee = await db.attendee.findUnique({
-      where: { qrCodeId },
+      where: { qrCodeId: normalizedQrCodeId },
     });
 
     if (!attendee) {
