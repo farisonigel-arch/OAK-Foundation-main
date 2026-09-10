@@ -7,17 +7,6 @@ export function middleware(request: NextRequest) {
     const path = request.nextUrl.pathname;
     const rawRole = request.cookies.get('oak-role')?.value;
     const role = rawRole ? decodeURIComponent(rawRole) : undefined;
-    const qrCodeId = request.cookies.get('oak-qr-id')?.value;
-
-    if (path === '/' && role) {
-        const destination = role === 'Partner'
-            ? qrCodeId ? `/pass/${qrCodeId}` : '/directory'
-            : role === 'Coordination Team'
-                ? '/checkin'
-                : '/programme';
-        return NextResponse.redirect(new URL(destination, request.url));
-    }
-
     if (!protectedPaths.some((protectedPath) => path.startsWith(protectedPath))) {
         return NextResponse.next();
     }
@@ -37,4 +26,4 @@ export function middleware(request: NextRequest) {
     return NextResponse.next();
 }
 
-export const config = { matcher: ['/', '/checkin/:path*', '/programme/:path*', '/directory/:path*', '/attendance/:path*', '/pass/:path*'] };
+export const config = { matcher: ['/checkin/:path*', '/programme/:path*', '/directory/:path*', '/attendance/:path*', '/pass/:path*'] };

@@ -27,6 +27,16 @@ export async function POST(request: Request) {
 
     const fullName = `${firstName} ${lastName}`.trim();
     const fullOrg = subPartner ? `${organization} (${subPartner})` : organization;
+    const existingAttendee = await db.attendee.findUnique({ where: { email } });
+
+    if (existingAttendee) {
+      const response = NextResponse.json({ success: true, role: existingAttendee.role, qrCodeId: existingAttendee.qrCodeId });
+      response.cookies.set('oak-role', existingAttendee.role, { httpOnly: false, sameSite: 'lax', path: '/', maxAge: 60 * 60 * 24 * 30 });
+      if (existingAttendee.qrCodeId) {
+        response.cookies.set('oak-qr-id', existingAttendee.qrCodeId, { httpOnly: false, sameSite: 'lax', path: '/', maxAge: 60 * 60 * 24 * 30 });
+      }
+      return response;
+    }
 
     const newAttendee = await db.attendee.create({
       data: {

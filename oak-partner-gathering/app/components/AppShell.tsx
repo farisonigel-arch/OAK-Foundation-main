@@ -17,6 +17,7 @@ const navigation = [
 export function AppShell({ children, activePath }: { children: React.ReactNode; activePath?: string }) {
     const pathname = usePathname();
     const active = activePath ?? pathname;
+    const registrationOnly = pathname === '/';
     const role = useSyncExternalStore(
         () => () => undefined,
         () => {
@@ -36,12 +37,12 @@ export function AppShell({ children, activePath }: { children: React.ReactNode; 
 
     return (
         <div className="min-h-screen bg-[#f4f5f7] text-[#0e1726] md:flex">
-            <aside className="hidden w-[172px] shrink-0 flex-col border-r border-[#e4e8ed] bg-white md:flex">
-                <div className="border-b border-[#e4e8ed] px-4 pb-5 pt-5">
-                    <Image src="/logo.jpeg" alt="OAK Foundation" width={104} height={48} className="h-12 w-[104px] object-contain object-left" />
+            <aside className="hidden w-[132px] shrink-0 flex-col border-r border-[#e4e8ed] bg-white md:flex">
+                <div className="border-b border-[#e4e8ed] px-3 pb-4 pt-3">
+                    <Image src="/logo.jpeg" alt="OAK Foundation" width={92} height={44} className="h-11 w-[92px] object-contain object-left" />
                 </div>
-                <nav className="space-y-1 px-3 py-4">
-                    {navigation.filter(({ href }) => allowedPaths.some((path) => path === '/' ? href === '/' : href.startsWith(path))).map(({ href, label, icon: Icon }) => {
+                <nav className="space-y-1 px-3 py-3">
+                    {navigation.filter(({ href }) => registrationOnly ? href === '/' : allowedPaths.some((path) => path === '/' ? href === '/' : href.startsWith(path))).map(({ href, label, icon: Icon }) => {
                         const isActive = href === '/' ? active === '/' : active.startsWith(href);
                         return (
                             <Link
