@@ -27,7 +27,11 @@ export function AppShell({ children, activePath }: { children: React.ReactNode; 
         () => null,
     );
 
+<<<<<<< HEAD
     const allowedPaths = role === 'Coordination Team' || role === 'OAK Staff'
+=======
+    const allowedPaths = role === 'Coordination Team'
+>>>>>>> d203fbf811e27424e823814268aff38d62c536db
         ? ['/', '/checkin', '/programme', '/directory', '/attendance']
         : role === 'Partner'
             ? ['/', '/pass', '/directory']

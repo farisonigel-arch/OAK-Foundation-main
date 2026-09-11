@@ -44,7 +44,11 @@ export default function RegistrationPage() {
       } else {
         if (result.role === 'Partner' && result.qrCodeId) {
           router.push(`/pass/${result.qrCodeId}`);
+<<<<<<< HEAD
         } else if (result.role === 'Coordination Team' || result.role === 'OAK Staff') {
+=======
+        } else if (result.role === 'Coordination Team') {
+>>>>>>> d203fbf811e27424e823814268aff38d62c536db
           router.push('/checkin');
         } else {
           router.push('/programme');

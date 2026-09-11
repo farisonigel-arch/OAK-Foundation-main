@@ -11,7 +11,11 @@ export function middleware(request: NextRequest) {
         return NextResponse.next();
     }
 
+<<<<<<< HEAD
     const allowed = role === 'Coordination Team' || role === 'OAK Staff'
+=======
+    const allowed = role === 'Coordination Team'
+>>>>>>> d203fbf811e27424e823814268aff38d62c536db
         ? ['/checkin', '/programme', '/directory', '/attendance']
         : role === 'Partner'
             ? ['/pass', '/directory']
