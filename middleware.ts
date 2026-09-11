@@ -11,7 +11,7 @@ export function middleware(request: NextRequest) {
         return NextResponse.next();
     }
 
-    const allowed = role === 'Coordination Team'
+    const allowed = role === 'Coordination Team' || role === 'OAK Staff'
         ? ['/checkin', '/programme', '/directory', '/attendance']
         : role === 'Partner'
             ? ['/pass', '/directory']
