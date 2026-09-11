@@ -1,0 +1,34 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model Attendee {
+  id                    String          @id @default(uuid())
+  fullName              String
+  organization          String
+  role                  String
+  email                 String          @unique
+  phone                 String?
+  dietaryRequirements   String?
+  accessibilityNeeds    String?
+  travelDetails         String?
+  qrCodeId              String?         @unique
+  accommodationDetails  String?
+  createdAt             DateTime        @default(now())
+  attendanceLogs        AttendanceLog[]
+}
+
+model AttendanceLog {
+  id          String   @id @default(uuid())
+  attendeeId  String
+  attendee    Attendee @relation(fields: [attendeeId], references: [id], onDelete: Cascade)
+  checkInDate String
+  checkInTime DateTime @default(now())
+
+  @@unique([attendeeId, checkInDate])
+}
