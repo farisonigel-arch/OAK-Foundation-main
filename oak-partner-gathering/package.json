@@ -5,12 +5,12 @@
   "scripts": {
     "predev": "prisma generate",
     "dev": "next dev --webpack",
-    "build": "next build",
+    "build": "prisma generate && next build",
     "start": "next start",
     "lint": "eslint"
   },
   "dependencies": {
-    "@prisma/client": "^5.22.0",
+    "@prisma/client": "^7.10.0",
     "@types/pg": "^8.23.1",
     "html5-qrcode": "^2.3.8",
     "lucide-react": "^1.43.0",
