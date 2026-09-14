@@ -3,18 +3,16 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "predev": "prisma generate",
+    "predev": "node scripts/select-db-schema.mjs && prisma generate",
     "dev": "next dev --webpack",
-    "build": "prisma generate && next build",
+    "build": "node scripts/select-db-schema.mjs && prisma generate && next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "db:push": "node scripts/select-db-schema.mjs && prisma db push",
+    "db:studio": "node scripts/select-db-schema.mjs && prisma studio"
   },
   "dependencies": {
-<<<<<<< HEAD
-    "@prisma/client": "^7.10.0",
-=======
     "@prisma/client": "^5.22.0",
->>>>>>> d203fbf811e27424e823814268aff38d62c536db
     "@types/pg": "^8.23.1",
     "html5-qrcode": "^2.3.8",
     "lucide-react": "^1.43.0",
