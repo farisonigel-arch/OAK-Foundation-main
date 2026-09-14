@@ -1,0 +1,46 @@
+// Production datasource (PostgreSQL), used on Vercel.
+// This file is copied to prisma/schema.prisma by scripts/select-db-schema.mjs.
+// Do not edit prisma/schema.prisma directly — edit this file and
+// prisma/schema.sqlite.prisma instead, and keep the `model` blocks in sync.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Note: if your Postgres provider gives you both a pooled connection string
+// (e.g. PgBouncer/"pgbouncer=true") and a direct one, DATABASE_URL can just be
+// the pooled one — Prisma's `db push`/`migrate` work fine through most modern
+// poolers (Neon, Vercel Postgres). If you ever hit pooler errors while running
+// `npm run db:push`, temporarily set DATABASE_URL to the direct (non-pooled)
+// connection string for that one command.
+
+model Attendee {
+  id                    String          @id @default(uuid())
+  fullName              String
+  organization          String
+  role                  String
+  email                 String          @unique
+  phone                 String?
+  dietaryRequirements   String?
+  accessibilityNeeds    String?
+  travelDetails         String?
+  qrCodeId              String?         @unique
+  accommodationDetails  String?
+  createdAt             DateTime        @default(now())
+  attendanceLogs        AttendanceLog[]
+}
+
+model AttendanceLog {
+  id          String   @id @default(uuid())
+  attendeeId  String
+  attendee    Attendee @relation(fields: [attendeeId], references: [id], onDelete: Cascade)
+  checkInDate String
+  checkInTime DateTime @default(now())
+
+  @@unique([attendeeId, checkInDate])
+}
