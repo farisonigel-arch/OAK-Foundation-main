@@ -5,9 +5,9 @@ import { useState } from 'react';
 import { AppShell, PageHeader } from '../components/AppShell';
 
 const days = [
-    { id: 'Day 1', date: '8 Mar', label: 'MON' },
-    { id: 'Day 2', date: '10 Mar', label: 'TUE' },
-    { id: 'Day 3', date: '11 Mar', label: 'WED' },
+    { id: 'Day 11', date: '8 Mar', label: 'MON' },
+    { id: 'Day 22', date: '10 Mar', label: 'TUE' },
+    { id: 'Day 33', date: '11 Mar', label: 'WED' },
 ];
 
 const schedule = [
